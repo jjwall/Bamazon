@@ -14,9 +14,11 @@ var connection = mysql.createConnection({
 	database: 'Bamazon'
 });
 
-var query1 = "SELECT * FROM products";
+var query = "SELECT * FROM products";
 
-connection.query(query1, function(err, results){
+var x;
+
+connection.query(query, function(err, results){
 	for (var i = 0; i < results.length; i++) {
     	console.log("ID#: " + results[i].item_id);
     	console.log("Product Name: " + results[i].product_name);
@@ -25,4 +27,37 @@ connection.query(query1, function(err, results){
     	console.log("Amount In Stock: " + results[i].stock_quantity);
     	console.log("------------------------------------")
     }
+
+	inquirer.prompt([
+		{
+    		type: "input",
+    		message: "What is the ID# of the product you would like to purchase?",
+    		name: "id"
+  		},
+
+  		{
+    		type: "input",
+    		message: "How many unit(s) would you like to purchase?",
+    		name: "stock"
+  		}
+
+	]).then(function(choice) {
+		x = choice.id - 1;
+		console.log(results[x].product_name);
+		if (results[x].stock_quantity >= choice.stock){
+			console.log("you bought dat ish successfullly");
+		}
+
+		else {
+			console.log("not enought qunatity");
+		}
+
+		/*if (choice.id == 5){
+			console.log("hitthere");
+		}
+		else{
+			console.log("poops");
+		}*/
+
+	});
 });
