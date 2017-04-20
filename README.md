@@ -24,8 +24,8 @@ To verify we will look back at the MySQL workbench and see that:
 
 Yep! Our DataBase has successfully been updated and there are now 70 copies of Daily Stoic left in stock.
 
-And if we try to order a product that's out of a stock:
+And if we try to order a product that's out of stock:
 
 ![Shot 5](/images/shot5.png)
 
-#nintendoplz
+#NintendoPlz
