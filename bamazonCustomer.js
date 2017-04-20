@@ -1,9 +1,6 @@
 var mysql = require('mysql');
 var inquirer = require("inquirer");
 
-// Sets localhost to 3000
-//var PORT = process.env.PORT || 3000;
-
 var connection = mysql.createConnection({
 	host: "localhost",
 	port: 3306,
@@ -16,9 +13,15 @@ var connection = mysql.createConnection({
 
 var query = "SELECT * FROM products";
 
+//var query1 = "UPDATE products SET stock_quantity = ? WHERE item_id = ?'," [stock_quantity, item_id];
+
 var x;
 
 connection.query(query, function(err, results){
+	if (err) {
+		console.log(err);
+	}
+	else{
 	for (var i = 0; i < results.length; i++) {
     	console.log("ID#: " + results[i].item_id);
     	console.log("Product Name: " + results[i].product_name);
@@ -43,21 +46,21 @@ connection.query(query, function(err, results){
 
 	]).then(function(choice) {
 		x = choice.id - 1;
+		xID = choice.id;
 		console.log(results[x].product_name);
 		if (results[x].stock_quantity >= choice.stock){
-			console.log("you bought dat ish successfullly");
+			var newStock = results[x].stock_quantity - choice.stock;
+			connection.query("UPDATE products SET ? WHERE ?", [{stock_quantity: newStock }, {item_id: xID }], function(error, res){
+				if (error){
+					console.log(error);
+				}
+			});
+			console.log("You bought " + choice.stock + " " + results[x].product_name + "(s) for a total cost of $" + choice.stock * results[x].PTC + ".");
+			console.log("There are " + newStock + " " + results[x].product_name + "(s) still available for purchase.");
 		}
-
 		else {
-			console.log("not enought qunatity");
+			console.log("Insufficient quantity");
 		}
-
-		/*if (choice.id == 5){
-			console.log("hitthere");
-		}
-		else{
-			console.log("poops");
-		}*/
-
 	});
+}
 });
